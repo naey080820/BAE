@@ -1,9 +1,38 @@
 body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f6f8fa; font-family: system-ui, sans-serif; }
-.card { background: #fff; border: 1px solid #d0d7de; border-radius: 12px; padding: 32px; width: 380px; }
-h1 { margin-top: 0; }
-.tabs { display: flex; gap: 4px; border-bottom: 1px solid #d0d7de; }
-.tab { background: none; border: none; padding: 8px 12px; cursor: pointer; color: #57606a; border-bottom: 2px solid transparent; }
-.tab.active { color: #24292f; font-weight: 600; border-bottom-color: #fd8c73; }
+.card { position: relative; background: #fff; border: 1px solid #d0d7de; border-radius: 12px; padding: 32px; width: 380px; max-width: calc(100vw - 32px); box-sizing: border-box; animation: pop-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+h1 { margin-top: 0; min-height: 1.2em; }
+
+/* 소리 켜기/끄기 */
+.mute { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 18px; cursor: pointer; opacity: 0.6; transition: opacity 0.2s, transform 0.2s; }
+.mute:hover { opacity: 1; transform: scale(1.15); }
+
+/* 탭 메뉴 + 미끄러지는 밑줄 */
+.tabs { position: relative; display: flex; gap: 4px; border-bottom: 1px solid #d0d7de; }
+.tab { background: none; border: none; padding: 8px 12px; cursor: pointer; color: #57606a; transition: color 0.25s; }
+.tab:hover { color: #24292f; }
+.tab.active { color: #24292f; font-weight: 600; }
+.indicator { position: absolute; bottom: -1px; height: 2px; background: #fd8c73; border-radius: 2px; transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1), width 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* 탭 전환 애니메이션 */
 .content { line-height: 1.6; min-height: 80px; }
-.cta { background: #1f883d; color: #fff; border: none; border-radius: 6px; padding: 10px 16px; cursor: pointer; font-size: 14px; }
-.cta:hover { background: #1a7f37; }
+.enter-right { animation: slide-right 0.4s ease-out; }
+.enter-left { animation: slide-left 0.4s ease-out; }
+
+/* 한 글자씩 흐르며 등장 */
+.word { white-space: nowrap; }
+.char { display: inline-block; white-space: pre; animation: char-in 0.3s ease-out both; }
+.caret { display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -0.15em; background: #24292f; animation: blink 0.8s steps(1) infinite; }
+
+.cta { background: #1f883d; color: #fff; border: none; border-radius: 6px; padding: 10px 16px; cursor: pointer; font-size: 14px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+.cta:hover { background: #1a7f37; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(31, 136, 61, 0.3); }
+.cta:active { transform: translateY(0) scale(0.97); }
+
+@keyframes char-in { from { opacity: 0; transform: translateY(6px); filter: blur(2px); } to { opacity: 1; transform: none; filter: none; } }
+@keyframes slide-right { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+@keyframes slide-left { from { opacity: 0; transform: translateX(-24px); } to { opacity: 1; transform: none; } }
+@keyframes pop-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
